@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/sammcj/gollama/utils"
+	"github.com/mipalgu/gollama/utils"
 )
 
 // Theme represents a colour scheme for the TUI

@@ -12,8 +12,8 @@ import (
 	"strings"
 
 	"github.com/ollama/ollama/api"
-	"github.com/sammcj/gollama/logging"
-	"github.com/sammcj/gollama/utils"
+	"github.com/mipalgu/gollama/logging"
+	"github.com/mipalgu/gollama/utils"
 )
 
 // LMStudioModel represents an LM Studio model with enhanced metadata

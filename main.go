@@ -21,11 +21,11 @@ import (
 	"github.com/ollama/ollama/api"
 	"golang.org/x/term"
 
-	"github.com/sammcj/gollama/config"
-	"github.com/sammcj/gollama/lmstudio"
-	"github.com/sammcj/gollama/logging"
-	"github.com/sammcj/gollama/styles"
-	"github.com/sammcj/gollama/vramestimator"
+	"github.com/mipalgu/gollama/config"
+	"github.com/mipalgu/gollama/lmstudio"
+	"github.com/mipalgu/gollama/logging"
+	"github.com/mipalgu/gollama/styles"
+	"github.com/mipalgu/gollama/vramestimator"
 	"github.com/sammcj/spitter/spitter"
 )
 
@@ -98,7 +98,7 @@ var Version string // Version is set by the build system
 
 func main() {
 	if Version == "" {
-		Version = "1.50.0"
+		Version = "1.37.5"
 	}
 
 	cfg, err := config.LoadConfig()

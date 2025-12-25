@@ -65,7 +65,7 @@ Gollama Intro ("Podcast" Episode):
 ### go install (recommended)
 
 ```shell
-go install github.com/sammcj/gollama@HEAD
+go install github.com/mipalgu/gollama@HEAD
 ```
 
 ### curl
@@ -73,12 +73,12 @@ go install github.com/sammcj/gollama@HEAD
 I don't recommend this method as it's not as easy to update, but you can use the following command:
 
 ```shell
-curl -sL https://raw.githubusercontent.com/sammcj/gollama/refs/heads/main/scripts/install.sh | bash
+curl -sL https://raw.githubusercontent.com/mipalgu/gollama/refs/heads/main/scripts/install.sh | bash
 ```
 
 ### Manually
 
-Download the most recent release from the [releases page](https://github.com/sammcj/gollama/releases) and extract the binary to a directory in your PATH.
+Download the most recent release from the [releases page](https://github.com/mipalgu/gollama/releases) and extract the binary to a directory in your PATH.
 
 e.g. `zip -d gollama*.zip -d gollama && mv gollama /usr/local/bin`
 
@@ -462,7 +462,7 @@ Example configuration:
 1. Clone the repository:
 
     ```shell
-    git clone https://github.com/sammcj/gollama.git
+    git clone https://github.com/mipalgu/gollama.git
     cd gollama
     ```
 

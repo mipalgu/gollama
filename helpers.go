@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/sammcj/gollama/config"
-	"github.com/sammcj/gollama/logging"
-	"github.com/sammcj/gollama/styles"
+	"github.com/mipalgu/gollama/config"
+	"github.com/mipalgu/gollama/logging"
+	"github.com/mipalgu/gollama/styles"
 
 	"github.com/ollama/ollama/api"
 	"golang.org/x/term"

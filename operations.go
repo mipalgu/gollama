@@ -17,10 +17,10 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/ollama/ollama/api"
 	ollama_model "github.com/ollama/ollama/types/model"
-	"github.com/sammcj/gollama/config"
-	"github.com/sammcj/gollama/lmstudio"
-	"github.com/sammcj/gollama/logging"
-	"github.com/sammcj/gollama/styles"
+	"github.com/mipalgu/gollama/config"
+	"github.com/mipalgu/gollama/lmstudio"
+	"github.com/mipalgu/gollama/logging"
+	"github.com/mipalgu/gollama/styles"
 )
 
 func runModel(model string, cfg *config.Config) tea.Cmd {

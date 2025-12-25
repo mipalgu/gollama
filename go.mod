@@ -1,4 +1,4 @@
-module github.com/sammcj/gollama
+module github.com/mipalgu/gollama
 
 go 1.25.4
 

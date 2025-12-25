@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sammcj/gollama/config"
+	"github.com/mipalgu/gollama/config"
 )
 
 func TestRunModel(t *testing.T) {

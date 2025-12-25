@@ -100,7 +100,7 @@ ci: ## build for linux and macOS
 	@echo "Linux (arm64): ./dist/linux_arm64/gollama"
 
 install: ## Install latest from GitHub
-	go install github.com/sammcj/gollama@latest
+	go install github.com/mipalgu/gollama@latest
 
 install-local: build ## Install locally-built version to PREFIX (default: /usr/local)
 	@$(eval PREFIX ?= /usr/local)

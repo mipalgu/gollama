@@ -9,8 +9,8 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/sammcj/gollama/logging"
-	"github.com/sammcj/gollama/utils"
+	"github.com/mipalgu/gollama/logging"
+	"github.com/mipalgu/gollama/utils"
 )
 
 type Model struct {
@@ -21,7 +21,7 @@ type Model struct {
 
 // ModelfileTemplate contains the default template for creating Modelfiles
 // TODO: Make the default Modelfile template configurable
-const ModelfileTemplate = `### MODEL IMPORTED FROM LM-STUDIO BY GOLLAMA - https://github.com/sammcj/gollama ###
+const ModelfileTemplate = `### MODEL IMPORTED FROM LM-STUDIO BY GOLLAMA - https://github.com/mipalgu/gollama ###
 
 # 1. You may need to add appropriate TEMPLATE and STOP parameters for your model
 # 2. Tune the below inference, model load parameters and template to your needs

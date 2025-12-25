@@ -27,14 +27,14 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 # Get the latest release from Github
-VER=$(curl --silent -qI https://github.com/sammcj/gollama/releases/latest | awk -F '/' '/^location/ {print  substr($NF, 1, length($NF)-1)}')
+VER=$(curl --silent -qI https://github.com/mipalgu/gollama/releases/latest | awk -F '/' '/^location/ {print  substr($NF, 1, length($NF)-1)}')
 
 echo "Downloading gollama ${VER} for ${OS}-${ARCH}..."
 
 if [ "${OS}" == "darwin" ]; then
-  URL="https://github.com/sammcj/gollama/releases/download/$VER/gollama-macos.zip"
+  URL="https://github.com/mipalgu/gollama/releases/download/$VER/gollama-macos.zip"
 else
-  URL="https://github.com/sammcj/gollama/releases/download/$VER/gollama-${OS}-${SHORT_ARCH}.zip"
+  URL="https://github.com/mipalgu/gollama/releases/download/$VER/gollama-${OS}-${SHORT_ARCH}.zip"
 fi
 
 wget -q --show-progress -O /tmp/gollama.zip "${URL}"

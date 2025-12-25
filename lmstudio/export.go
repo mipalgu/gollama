@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/ollama/ollama/api"
-	"github.com/sammcj/gollama/logging"
+	"github.com/mipalgu/gollama/logging"
 )
 
 // LMStudioConfig represents the complete configuration for a model

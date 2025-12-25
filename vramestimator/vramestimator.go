@@ -18,9 +18,9 @@ import (
 	"time"
 
 	"github.com/olekukonko/tablewriter"
-	"github.com/sammcj/gollama/logging"
-	"github.com/sammcj/gollama/styles"
-	"github.com/sammcj/gollama/utils"
+	"github.com/mipalgu/gollama/logging"
+	"github.com/mipalgu/gollama/styles"
+	"github.com/mipalgu/gollama/utils"
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
