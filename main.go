@@ -98,7 +98,7 @@ var Version string // Version is set by the build system
 
 func main() {
 	if Version == "" {
-		Version = "1.37.5"
+		Version = "1.50.0"
 	}
 
 	cfg, err := config.LoadConfig()
@@ -130,6 +130,8 @@ func main() {
 
 	listFlag := flag.Bool("l", false, "List all available Ollama models and exit")
 	linkFlag := flag.Bool("L", false, "Link Ollama models to LM Studio")
+	exportConfigFlag := flag.Bool("export-config", false, "Export Ollama Modelfile configs to LM Studio when linking")
+	flag.BoolVar(exportConfigFlag, "x", false, "Export Ollama Modelfile configs to LM Studio when linking (alias for --export-config)")
 	linkLMStudioFlag := flag.Bool("link-lmstudio", false, "Link LM Studio models to Ollama")
 	createFromLMStudioFlag := flag.Bool("C", false, "Create Ollama models from LM Studio models")
 	flag.BoolVar(createFromLMStudioFlag, "create-from-lmstudio", false, "Create Ollama models from LM Studio models")
@@ -421,7 +423,7 @@ func main() {
 		successCount := 0
 		for _, model := range models {
 			fmt.Printf("%sLinking model: %s... ", prefix, model.Name)
-			message, err := linkModel(model.Name, app.lmStudioModelsDir, false, *dryRunFlag, client)
+			message, err := linkModel(model.Name, app.lmStudioModelsDir, false, *dryRunFlag, *exportConfigFlag, client)
 
 			if err != nil {
 				logging.ErrorLogger.Printf("Error linking model %s: %v\n", model.Name, err)

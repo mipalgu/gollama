@@ -18,6 +18,7 @@ import (
 	"github.com/ollama/ollama/api"
 	ollama_model "github.com/ollama/ollama/types/model"
 	"github.com/sammcj/gollama/config"
+	"github.com/sammcj/gollama/lmstudio"
 	"github.com/sammcj/gollama/logging"
 	"github.com/sammcj/gollama/styles"
 )
@@ -1161,7 +1162,7 @@ func searchModels(models []Model, searchTerms ...string) {
 	}
 }
 
-func linkModel(modelName, lmStudioModelsDir string, noCleanup bool, dryRun bool, client *api.Client) (string, error) {
+func linkModel(modelName, lmStudioModelsDir string, noCleanup bool, dryRun bool, exportConfig bool, client *api.Client) (string, error) {
 	modelFiles, err := getModelFiles(modelName, client)
 	if err != nil {
 		return "", fmt.Errorf("error getting model files for %s: %v", modelName, err)
@@ -1249,14 +1250,16 @@ func linkModel(modelName, lmStudioModelsDir string, noCleanup bool, dryRun bool,
 		}
 	}
 
-	// If all required symlinks exist, we're done
+	// If all required symlinks exist, we're done unless we need to export the config
 	if mainLinkExists && (modelFiles.Projector == "" || projLinkExists) {
-		message := "Model %s is already symlinked to %s"
-		logging.InfoLogger.Printf(message+"\n", modelName, lmStudioMainPath)
-		if modelFiles.Projector != "" {
-			logging.InfoLogger.Printf("Vision projector also symlinked to %s\n", lmStudioProjPath)
+		if !exportConfig {
+			message := "Model %s is already symlinked to %s"
+			logging.InfoLogger.Printf(message+"\n", modelName, lmStudioMainPath)
+			if modelFiles.Projector != "" {
+				logging.InfoLogger.Printf("Vision projector also symlinked to %s\n", lmStudioProjPath)
+			}
+			return "", nil
 		}
-		return "", nil
 	}
 
 	if dryRun {
@@ -1272,6 +1275,13 @@ func linkModel(modelName, lmStudioModelsDir string, noCleanup bool, dryRun bool,
 			projMessage := fmt.Sprintf("[DRY RUN] Would also symlink vision projector to %s", lmStudioProjPath)
 			logging.InfoLogger.Println(projMessage)
 			fullPathMessage += "\n" + projMessage
+		}
+
+		if exportConfig {
+			configPath := filepath.Join(lmStudioModelDir, lmStudioModelName+".config.json")
+			exportMessage := fmt.Sprintf("[DRY RUN] Would export Modelfile config to %s", configPath)
+			logging.InfoLogger.Println(exportMessage)
+			fullPathMessage += "\n" + exportMessage
 		}
 
 		return fullPathMessage, nil
@@ -1307,6 +1317,34 @@ func linkModel(modelName, lmStudioModelsDir string, noCleanup bool, dryRun bool,
 
 		if !noCleanup {
 			cleanBrokenSymlinks(lmStudioModelsDir)
+		}
+
+		// Export configuration if requested
+		if exportConfig {
+			configPath := filepath.Join(lmStudioModelDir, lmStudioModelName+".config.json")
+
+			if dryRun {
+				logging.InfoLogger.Printf("[DRY RUN] Would export Modelfile config to %s\n", configPath)
+				logging.InfoLogger.Printf("[DRY RUN] Would export preset to ~/.lmstudio/config-presets/%s.preset.json\n", lmStudioModelName)
+			} else {
+				// Export sidecar config file
+				err := lmstudio.ExportModelConfig(modelName, configPath, client)
+				if err != nil {
+					logging.ErrorLogger.Printf("Warning: Failed to export config for %s: %v\n", modelName, err)
+					// Don't fail entire operation for config export errors
+				} else {
+					logging.InfoLogger.Printf("Exported configuration to %s\n", configPath)
+				}
+
+				// Export preset file for LM Studio to discover
+				err = lmstudio.ExportModelPreset(modelName, lmStudioModelName, client)
+				if err != nil {
+					logging.ErrorLogger.Printf("Warning: Failed to export preset for %s: %v\n", modelName, err)
+					// Don't fail entire operation for preset export errors
+				} else {
+					logging.InfoLogger.Printf("Exported preset to ~/.lmstudio/config-presets/%s.preset.json\n", lmStudioModelName)
+				}
+			}
 		}
 
 		message := "Symlinked %s to %s"

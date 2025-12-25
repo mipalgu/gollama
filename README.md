@@ -46,6 +46,7 @@ It's in active development, so there are some bugs and missing features, however
 - Calculate approximate vRAM usage for a model
 - Bidirectional sync with LM Studio:
   - Link Ollama models to LM Studio
+  - Export Ollama Modelfile configurations as LM Studio presets
   - Create Ollama models from LM Studio models **EXPERIMENTAL**
 - Copy / rename models
 - Push models to a registry
@@ -148,6 +149,7 @@ Gollama supports bidirectional syncing between Ollama and LM Studio:
 **Ollama → LM Studio:**
 - Link (`l`): Link selected model to LM Studio
 - Link All (`L`): Link all models to LM Studio
+- Export Config (`-x` with `-L`): Export Ollama Modelfiles as LM Studio presets
 
 **LM Studio → Ollama:**
 - `--link-lmstudio`: Link LM Studio models to Ollama (creates symlinks)
@@ -157,9 +159,12 @@ Gollama supports bidirectional syncing between Ollama and LM Studio:
 - **Vision model support**: Automatically detects and handles mmproj files for vision models
 - **Smart filtering**: Skips models already linked between systems
 - **Safe operation**: Dry-run mode (`-n` or `--dry-run`) shows what would happen without making changes
+- **Preset export**: Converts Ollama Modelfile configurations to LM Studio preset format for manual loading
 - **Configurable parameters**: Uses sensible defaults (16K context, 0.6 temperature, etc.)
 
 When linking models to LM Studio, Gollama creates a Modelfile with the template from LM-Studio and a set of default parameters that you can adjust.
+
+The `--export-config` flag additionally generates `.preset.json` files in `~/.lmstudio/config-presets/` that can be manually loaded in LM Studio to apply model-specific configurations (templates, stop sequences, etc.).
 
 Note: Linking requires admin privileges if you're running Windows.
 
@@ -192,6 +197,7 @@ This functionality uses the [spitter](https://github.com/sammcj/spitter) package
 
 **LM Studio Integration:**
 - `-L`: Link all available Ollama models to LM Studio and exit
+- `-x` or `--export-config`: Export Ollama Modelfile configurations as LM Studio presets (used with `-L`)
 - `--link-lmstudio`: Link all available LM Studio models to Ollama and exit **EXPERIMENTAL**
 - `-C` or `--create-from-lmstudio`: Create Ollama models from LM Studio models **EXPERIMENTAL**
 - `-n` or `--dry-run`: Show what would happen without making any changes (works with all sync operations)
@@ -364,7 +370,43 @@ gollama -L -n
 
 # Actually link all models
 gollama -L
+
+# Link all models and export their configurations as LM Studio presets
+gollama -L -x
+# or
+gollama -L --export-config
 ```
+
+**Export Configurations as LM Studio Presets:**
+
+The `--export-config` (or `-x`) flag exports Ollama Modelfile configurations as LM Studio preset files:
+
+- Creates `.preset.json` files in `~/.lmstudio/config-presets/`
+- Converts Ollama templates to LM Studio's prompt template format
+- Includes system prompts, stop strings, and other parameters
+- Supports special variants like `:nothink` models with pre-filled thinking tags
+
+**Important:** Presets must be manually loaded in LM Studio:
+1. Open LM Studio and go to the Chat tab
+2. In the Inference Parameters panel, click "Load Preset"
+3. Select the desired preset from `~/.lmstudio/config-presets/`
+
+**Example workflow:**
+```shell
+# Create Ollama model variants
+ollama create mymodel:nothink -f Modelfile-nothink
+
+# Link to LM Studio and export configurations
+gollama -L -x
+
+# In LM Studio: Load the "mymodel-nothink" preset to use the thinking-suppressed variant
+```
+
+The preset export handles template conversion, including:
+- Chat format tokens (`<|system|>`, `<|user|>`, `<|assistant|>`)
+- Pre-filled thinking tags for nothink variants
+- Model-specific stop sequences
+- System prompts (automatically excluded for nothink variants to prevent overly brief responses)
 
 **Key differences between linking and creating:**
 
@@ -431,9 +473,25 @@ Example configuration:
     make build
     ```
 
-3. Run:
+3. Install locally (recommended):
 
     ```shell
+    # Install to /usr/local/bin (default)
+    make install-local
+
+    # Or install to a custom location
+    PREFIX=$HOME/.local make install-local
+    ```
+
+    The `install-local` target installs the locally-built binary instead of downloading from GitHub. This is useful when developing or testing local changes.
+
+4. Run:
+
+    ```shell
+    # If installed
+    gollama
+
+    # Or run directly without installing
     ./gollama
     ```
 
