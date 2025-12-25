@@ -99,8 +99,15 @@ ci: ## build for linux and macOS
 	@echo "Linux (amd64): ./dist/linux_amd64/gollama"
 	@echo "Linux (arm64): ./dist/linux_arm64/gollama"
 
-install: ## Install latest
+install: ## Install latest from GitHub
 	go install github.com/sammcj/gollama@latest
+
+install-local: build ## Install locally-built version to PREFIX (default: /usr/local)
+	@$(eval PREFIX ?= /usr/local)
+	@echo "Installing gollama to $(PREFIX)/bin/"
+	@install -d $(PREFIX)/bin
+	@install -m 755 gollama $(PREFIX)/bin/gollama
+	@echo "Installation complete: $(PREFIX)/bin/gollama"
 
 run: ## Run
 	@go run $(shell find *.go -not -name '*_test.go')
